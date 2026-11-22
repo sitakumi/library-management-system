@@ -1,0 +1,32 @@
+// api/prisma/schema.prisma
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  MEMBER
+  LIBRARIAN
+}
+
+model Genre {
+  id    String @id @default(uuid())
+  name  String @unique
+  books Book[]
+}
+
+model Book {
+  id          String @id @default(uuid())
+  title       String
+  author      String
+  isbn        String   @unique
+  totalCopies Int
+  genreId     String
+  genre       Genre    @relation(fields: [genreId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
